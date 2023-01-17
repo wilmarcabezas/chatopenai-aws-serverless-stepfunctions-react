@@ -1,18 +1,29 @@
 'use strict';
 
-module.exports.hello = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const openai = require('openai');
+openai.apiKey = process.env.OPENAPIKEY;
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+module.exports.handler = async (event) => {
+  
+  const prompt = event.prompt;
+  const model = event.model;
+  const temperature = event.temperature;
+  const tokens = event.tokens;
+
+  const response = await openai.Completion.create({
+    prompt: prompt,
+    model: model,
+    temperature: temperature,
+    max_tokens: tokens,
+  });
+
+  const result = {
+    answer: response.choices[0].text
+  }
+
+  return {
+    statusCode:200,
+    body:JSON.stringify(result)
+  }
+
 };
