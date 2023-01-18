@@ -26,11 +26,4 @@ module.exports.GenerateAI = async (event) => {
     body: JSON.stringify(result.data.choices[0].text)
   }
 }
-
-module.exports.temperatureRandomFunction= async(event)=>{
-
-  var randomNumber = Math.random() * (1 - 0.1) + 0.1;
-
-  return randomNumber;
-}
 ````
