@@ -1,29 +1,36 @@
-'use strict';
+const { Configuration, OpenAIApi } = require('openai');
 
-const openai = require('openai');
-openai.apiKey = process.env.OPENAPIKEY;
+module.exports.openaiFunction = async (event) => {
 
-module.exports.handler = async (event) => {
-  
-  const prompt = event.prompt;
-  const model = event.model;
-  const temperature = event.temperature;
-  const tokens = event.tokens;
-
-  const response = await openai.Completion.create({
-    prompt: prompt,
-    model: model,
-    temperature: temperature,
-    max_tokens: tokens,
+  const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY
   });
 
-  const result = {
-    answer: response.choices[0].text
-  }
+  
+  const body = JSON.parse(event.body);
+
+  const openai = new OpenAIApi(configuration)
+  const completion = openai.createCompletion({
+    model: 'text-davinci-003',
+    prompt: body.prompt,
+    temperature: body.temperature,
+    max_tokens: 1000
+  });
+
+  const result = await completion
 
   return {
-    statusCode:200,
-    body:JSON.stringify(result)
+    statusCode: 200,
+    body: JSON.stringify(result.data.choices[0].text)
   }
+}
 
-};
+module.exports.temperatureFunction= async(event)=>{
+
+  const body = JSON.parse(event.body);
+
+  return{
+    statusCode: 200,
+    body: JSON.stringify(body.temperature)
+  }
+}
