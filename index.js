@@ -10,7 +10,7 @@ const completion = openai.createCompletion({
   model:'text-davinci-003',
   prompt: 'Cual es la capital de Colombia?',
   temperature: .1,
-  max_tokens: 1000
+  max_tokens: 100
 })
 
 console.info('sedang mencari jawaban ...')
