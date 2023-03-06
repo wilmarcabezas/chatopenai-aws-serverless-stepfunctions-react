@@ -4,6 +4,7 @@ const { Configuration, OpenAIApi } = require('openai');
 
 module.exports.GenerateAI = async (event) => {
 
+
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY
   });
